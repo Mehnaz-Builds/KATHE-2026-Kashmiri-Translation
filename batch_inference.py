@@ -26,9 +26,10 @@ def run_batch(input_csv: str, output_csv: str):
             outputs = model.generate(
                 **inputs,
                 forced_bos_token_id=tokenizer.convert_tokens_to_ids("kas_Arab"),
-                max_new_tokens=128,
-                num_beams=5,
-                repetition_penalty=1.2
+                max_new_tokens=100,
+                num_beams=2,
+                length_penalty=1.0,
+                early_stopping=True
             )
             translations.extend(tokenizer.batch_decode(outputs, skip_special_tokens=True))
 
