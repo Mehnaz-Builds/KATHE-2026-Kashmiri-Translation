@@ -9,6 +9,13 @@ Official repository for KATHE 2026 Competition: English to Kashmiri (Perso-Arabi
 - **Validation Score:** **11.03 BLEU**
 
 ## 2. File Overview
+### Model Loading Interface
+For modular integration or evaluation pipelines, the model can be instantiated directly via `load_model.py`:
+
+```python
+from load_model import load_model
+
+model, tokenizer = load_model()
 - `single_inference.py` — Translates a single English sentence directly in the terminal.
 - `batch_inference.py` — Evaluator batch pipeline: parses input CSV and exports `submission.csv`.
 - `ensemble_inference.py` — Exploratory word-level ensembling script (included for transparency).
