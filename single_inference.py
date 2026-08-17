@@ -12,7 +12,7 @@ def translate(text: str) -> str:
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True).to(DEVICE)
     outputs = model.generate(
         **inputs,
-        forced_bos_token_id=tokenizer.lang_code_to_id["kas_Arab"],
+        forced_bos_token_id=tokenizer.convert_tokens_to_ids("kas_Arab"),
         max_new_tokens=128,
         num_beams=5,
         repetition_penalty=1.2
