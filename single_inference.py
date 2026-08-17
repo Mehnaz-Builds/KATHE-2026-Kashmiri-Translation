@@ -13,12 +13,13 @@ def translate(text: str) -> str:
     outputs = model.generate(
         **inputs,
         forced_bos_token_id=tokenizer.convert_tokens_to_ids("kas_Arab"),
-        max_new_tokens=128,
-        num_beams=5,
-        repetition_penalty=1.2
+        max_new_tokens=100,
+        num_beams=2,
+        length_penalty=1.0,
+        early_stopping=True
     )
     return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 if __name__ == "__main__":
-    text = sys.argv[1] if len(sys.argv) > 1 else "These are some verities of human nature."
+    text = sys.argv[1] if len(sys.argv) > 1 else "These are some verities of human nature"
     print(f"Output: {translate(text)}")
