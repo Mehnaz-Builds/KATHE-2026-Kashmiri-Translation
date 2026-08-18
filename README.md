@@ -55,9 +55,9 @@ Two ensembling strategies were evaluated:
  1. **Sentence-Level Fallback (10.56 BLEU):** Defaulted to NLLB, falling back to IndicTrans2 only on blank or degenerate output. (Rarely triggered as NLLB failures were subtle drift rather than corruption).
  2. **Word-Level Positional Merge (10.64 BLEU):** Used IndicTrans2 as the structural base sentence, forced NLLB's first word, and aligned remaining tokens using difflib.SequenceMatcher. Words were substituted with NLLB's diacritic-rich tokens whenever positional similarity exceeded >= 0.75.
 ### Qualitative Output Comparison Table
-| English Input | Fine-Tuned NLLB (11.03 BLEU) | Base IndicTrans2-1B | Positional Ensemble (10.64 BLEU) | Qualitative Observation |
+
+| English Input | Fine-Tuned NLLB (11.03 BLEU) | Base IndicTrans2 (8.14 BLEU) | Word-Level Ensemble (10.64 BLEU) | Qualitative Observation |
 |---|---|---|---|---|
-| *These are some verities of human nature* | یِم چھِ انسٲنی فطرتٕچ کینٛہہ حٔقیٖقتہٕ۔ | یِم چھِ اِنسان کٲرۍ کینٛہہ حٔقیٖقت | یِم چھِ انسٲنی فطرتٕچ کینٛہہ حٔقیٖقت | NLLB provides superior diacritic alignment; IndicTrans2 maintains structure. |
-| *She was a true visionary.* | سۄ ٲس اَکھ پۆز دُور اندیش۔ | سۄ ٲس اَکھ دُور اندیش | سۄ ٲس اَکھ پۆز دُور اندیش۔ | Ensemble successfully restores NLLB's diacritic marker (*پۆز*). |
+| He is very popular actor. | سُ چُھ واریاہ مشہؤر اداکار۔ | سہ چھ واریاہ مشہؤر اداکار۔ | سُ چُھ واریاہ مشہؤر اداکار۔ | At every word position, NLLB and IndicTrans2 output the same underlying word, differing only in diacritic marks (سُ vs سہ, چُھ vs چھ). Since character-similarity between each pair was above the 0.75 threshold, the algorithm substituted NLLB's diacritic-marked form at every position — not just the first word. Result: the ensemble reproduces NLLB's full diacritic accuracy while having IndicTrans2's word choice validate that each substitution was safe. This is the ensemble logic working as designed: when both models agree on meaning, prefer NLLB's superior diacritic marking. |
 ### Metric vs. Quality Analysis & Final Decision
 Both ensemble variants scored lower on automated metrics than the **standalone fine-tuned NLLB model (11.03 BLEU)**. This occurs because automated BLEU strictly rewards contiguous n-gram matches against reference text, and splicing tokens from two separate model outputs can disrupt exact n-gram sequences even when the result is human-readable.
